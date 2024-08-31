@@ -9,64 +9,323 @@ import {
   integer,
   timestamp,
   pgEnum,
-  serial
+  serial,
+  PgColumn
 } from 'drizzle-orm/pg-core';
-import { count, eq, ilike } from 'drizzle-orm';
+import {
+  count,
+  eq,
+  ilike,
+  asc,
+  desc,
+  gte,
+  lte,
+  and,
+  inArray
+} from 'drizzle-orm';
 import { createInsertSchema } from 'drizzle-zod';
 
-export const db = drizzle(neon(process.env.POSTGRES_URL!));
+// import { drizzle } from "drizzle-orm/postgres-js";
+// import postgres from "postgres";
+//
+import * as auth from './schema/auth';
+import * as details from './schema/details';
+import * as documents from './schema/documents';
+import { InsertDetials } from './schema/details';
+import { InsertDocuments } from './schema/documents';
+// import * as bills from "./schema/bills";
+// import * as savings from "./schema/savings";
+// import * as transactions from "./schema/transactions";
+//
+// export * from "./schema/types";
+//
+export const schema = { ...auth, ...details, ...documents };
+//
+// export { pgTable as tableCreator } from './schema/_table';
+//
+// export * from "drizzle-orm";
+//
+// // for query purposes
+// const queryClient = postgres(process.env.DATABASE_URL!, { ssl: true });
+// export const db = drizzle(queryClient, { schema });
 
-export const statusEnum = pgEnum('status', ['active', 'inactive', 'archived']);
+export const db = drizzle(neon(process.env.POSTGRES_URL!), { schema });
 
-export const products = pgTable('products', {
-  id: serial('id').primaryKey(),
-  imageUrl: text('image_url').notNull(),
-  name: text('name').notNull(),
-  status: statusEnum('status').notNull(),
-  price: numeric('price', { precision: 10, scale: 2 }).notNull(),
-  stock: integer('stock').notNull(),
-  availableAt: timestamp('available_at').notNull()
-});
-
-export type SelectProduct = typeof products.$inferSelect;
-export const insertProductSchema = createInsertSchema(products);
-
-export async function getProducts(
-  search: string,
-  offset: number
-): Promise<{
-  products: SelectProduct[];
-  newOffset: number | null;
-  totalProducts: number;
-}> {
-  // Always search the full table, not per page
-  if (search) {
-    return {
-      products: await db
-        .select()
-        .from(products)
-        .where(ilike(products.name, `%${search}%`))
-        .limit(1000),
-      newOffset: null,
-      totalProducts: 0
-    };
-  }
-
-  if (offset === null) {
-    return { products: [], newOffset: null, totalProducts: 0 };
-  }
-
-  let totalProducts = await db.select({ count: count() }).from(products);
-  let moreProducts = await db.select().from(products).limit(5).offset(offset);
-  let newOffset = moreProducts.length >= 5 ? offset + 5 : null;
-
-  return {
-    products: moreProducts,
-    newOffset,
-    totalProducts: totalProducts[0].count
-  };
+export async function totalDocuments(assignedCenter: string) {
+  const res = await db
+    .select({ count: count() })
+    .from(schema.documents)
+    .where(ilike(schema.documents.assignedCenter, `%${assignedCenter}%`));
+  return res[0].count;
 }
 
-export async function deleteProductById(id: number) {
-  await db.delete(products).where(eq(products.id, id));
+export async function getSingleDocument(id: number) {
+  return await db.query.documents.findFirst({
+    where: eq(schema.documents.id, id),
+    with: {
+      users: true
+    }
+  });
+}
+
+export async function getDetails(id: string) {
+  return await db
+    .select()
+    .from(schema.details)
+    .where(eq(schema.details.userId, id));
+}
+
+export async function changeDocStatus(
+  id: number,
+  status: 'approved' | 'rejected',
+  reason: string
+) {
+  if (status === 'approved') {
+    return await db
+      .update(schema.documents)
+      .set({
+        status,
+        approvedDate: new Date(),
+        reason
+      })
+      .where(eq(schema.documents.id, id));
+  } else if (status === 'rejected') {
+    return await db
+      .update(schema.documents)
+      .set({
+        status,
+        rejectedDate: new Date(),
+        reason
+      })
+      .where(eq(schema.documents.id, id));
+  }
+}
+
+export async function getDocumentById(
+  id: string,
+  search: string,
+  offset: number,
+  orderBy: string,
+  column: string,
+  type: string,
+  startDate: Date,
+  endDate: Date
+) {
+  const columns = {
+    title: schema.documents.title,
+    requestDate: schema.documents.requestDate,
+    fullName: schema.documents.fullName,
+    status: schema.documents.status
+  };
+  const currentCol = columns[column as keyof typeof columns];
+  let result;
+  if (orderBy === 'asc') {
+    result = await db
+      .select()
+      .from(schema.documents)
+      .where(
+        and(
+          eq(schema.documents.userId, id),
+          ilike(schema.documents.title, `%${search}%`),
+          ilike(schema.documents.status, `%${type}%`),
+          gte(schema.documents.requestDate, startDate),
+          lte(schema.documents.requestDate, endDate)
+        )
+      )
+      .orderBy(asc(currentCol))
+      .limit(8)
+      .offset(offset);
+  } else {
+    result = await db
+      .select()
+      .from(schema.documents)
+      .where(
+        and(
+          eq(schema.documents.userId, id),
+          ilike(schema.documents.title, `%${search}%`),
+          ilike(schema.documents.status, `%${type}%`),
+          gte(schema.documents.requestDate, startDate),
+          lte(schema.documents.requestDate, endDate)
+        )
+      )
+      .orderBy(desc(currentCol))
+      .limit(8)
+      .offset(offset);
+  }
+
+  return result;
+}
+
+export async function getDocuments(
+  search: string,
+  offset: number,
+  orderBy: string,
+  column: string,
+  type: string,
+  startDate: Date,
+  endDate: Date,
+  assignedCenter: string
+) {
+  const columns = {
+    title: schema.documents.title,
+    requestDate: schema.documents.requestDate,
+    fullName: schema.documents.fullName,
+    status: schema.documents.status
+  };
+  const currentCol = columns[column as keyof typeof columns];
+  let result;
+  if (orderBy === 'asc') {
+    result = await db
+      .select()
+      .from(schema.documents)
+      .where(
+        and(
+          ilike(schema.documents.title, `%${search}%`),
+          ilike(schema.documents.status, `%${type}%`),
+          gte(schema.documents.requestDate, startDate),
+          lte(schema.documents.requestDate, endDate),
+          ilike(schema.documents.assignedCenter, `%${assignedCenter}%`)
+        )
+      )
+      .orderBy(asc(currentCol))
+      .limit(5)
+      .offset(offset);
+  } else {
+    result = await db
+      .select()
+      .from(schema.documents)
+      .where(
+        and(
+          ilike(schema.documents.title, `%${search}%`),
+          ilike(schema.documents.status, `%${type}%`),
+          gte(schema.documents.requestDate, startDate),
+          lte(schema.documents.requestDate, endDate),
+          ilike(schema.documents.assignedCenter, `%${assignedCenter}%`)
+        )
+      )
+      .orderBy(desc(currentCol))
+      .limit(5)
+      .offset(offset);
+  }
+
+  return result;
+}
+
+export async function addDocument({
+  userId,
+  title,
+  fullName,
+  issueDate,
+  expiryDate,
+  city,
+  state,
+  zip,
+  address,
+  dob,
+  documentUrl,
+  thumbnailUrl,
+  assignedCenter,
+  income
+}: InsertDocuments) {
+  return await db.insert(schema.documents).values({
+    userId,
+    title,
+    fullName,
+    issueDate,
+    expiryDate,
+    city,
+    state,
+    zip,
+    address,
+    dob,
+    documentUrl,
+    thumbnailUrl,
+    assignedCenter,
+    income
+  });
+}
+
+type addUserDetailsType = {
+  userId: string;
+  firstName: string;
+  lastName: string;
+  dob: Date;
+  gender: string;
+  address: string;
+  city: string;
+  state: string;
+  zip: number;
+  contact: number;
+  email: string;
+};
+
+export async function addUserDetails({
+  userId,
+  fullName,
+  dob,
+  gender,
+  address,
+  city,
+  state,
+  zip,
+  phone,
+  email,
+  income
+}: InsertDetials) {
+  await db
+    .update(schema.users)
+    .set({
+      type: 'client'
+    })
+    .where(eq(schema.users.id, userId));
+
+  return await db.insert(schema.details).values({
+    userId,
+    fullName,
+    dob: new Date(dob),
+    gender,
+    address,
+    city,
+    state,
+    zip,
+    phone,
+    email,
+    income
+  });
+}
+
+export async function distributeDocuments(assignedCenter: string) {
+  let centerName = assignedCenter.split('-')[0];
+  let centerNumber = +assignedCenter.split('-')[1];
+  let ids: any = await db
+    .select({ id: schema.documents.id })
+    .from(schema.documents)
+    .where(ilike(schema.documents.assignedCenter, `%${centerName}%`));
+  ids = ids.map((idx: { id: number }) => idx.id);
+  const totalDocs = ids.length;
+  let eachTotal = Math.ceil(totalDocs / 3);
+  const centerIds = [];
+  for (let i = 0; i < 3; i++) {
+    centerIds.push(ids.splice(0, eachTotal));
+  }
+
+  let returnDocs = [];
+  let temp;
+  for (let i = 0; i < centerIds.length; i++) {
+    if (centerIds[i].length === 0) {
+      continue;
+    }
+    temp = await db
+      .update(schema.documents)
+      .set({
+        assignedCenter: `${centerName}-${i + 1}`
+      })
+      .where(inArray(schema.documents.id, centerIds[i]));
+    if (i + 1 === centerNumber) {
+      // @ts-ignore
+      returnDocs = temp;
+    }
+  }
+
+  return returnDocs.length;
 }

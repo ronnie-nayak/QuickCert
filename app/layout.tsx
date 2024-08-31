@@ -1,22 +1,28 @@
 import './globals.css';
+import { Quicksand } from 'next/font/google';
+import type { Metadata } from 'next';
+import { Toaster } from '@/components/ui/toaster';
 
-import { Analytics } from '@vercel/analytics/react';
-
-export const metadata = {
-  title: 'Next.js App Router + NextAuth + Tailwind CSS',
-  description:
-    'A user admin dashboard configured with Next.js, Postgres, NextAuth, Tailwind CSS, TypeScript, and Prettier.'
+export const metadata: Metadata = {
+  title: 'QuickCert',
+  description: 'Streamline your certification process'
 };
+const quicksand = Quicksand({
+  subsets: ['latin'],
+  weight: ['400', '700']
+});
 
-export default function RootLayout({
+export default function HomepageLayout({
   children
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className="flex min-h-screen w-full flex-col">{children}</body>
-      <Analytics />
+    <html className="" lang="en">
+      <body className={quicksand.className}>
+        {children}
+        <Toaster />
+      </body>
     </html>
   );
 }

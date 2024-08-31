@@ -1,6 +1,7 @@
 import type { Config } from 'tailwindcss';
+import { withUt } from 'uploadthing/tw';
 
-export default {
+export default withUt({
   darkMode: ['class'],
   content: [
     './pages/**/*.{ts,tsx}',
@@ -35,6 +36,10 @@ export default {
         destructive: {
           DEFAULT: 'hsl(var(--destructive))',
           foreground: 'hsl(var(--destructive-foreground))'
+        },
+        success: {
+          DEFAULT: 'hsl(var(--success))',
+          foreground: 'hsl(var(--success-foreground))'
         },
         muted: {
           DEFAULT: 'hsl(var(--muted))',
@@ -75,4 +80,4 @@ export default {
     }
   },
   plugins: [require('tailwindcss-animate')]
-} satisfies Config;
+}) satisfies Config;

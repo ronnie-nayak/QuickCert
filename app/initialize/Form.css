@@ -1,0 +1,198 @@
+/* Global Styles */
+.initialize {
+  font-family: 'Arial', sans-serif;
+  background-color: #f8f9fa;
+  /*margin: 30px 0;*/
+  padding: 30px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  background-color: #fff;
+  padding: 20px 40px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  width: 1500px;
+}
+
+.initialize h1 {
+  text-align: center;
+  color: #343a40;
+  margin-bottom: 20px;
+}
+/* Container for the name fields to align them horizontally */
+.name {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 20px; /* Add some space below the name fields */
+}
+
+/* Ensure both input fields have the same width */
+.name div {
+  flex: 1;
+}
+
+/* Label and input styling */
+.name label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.name input {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box; /* Ensures padding doesn't affect the total width */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.address {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.initialize label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #495057;
+}
+
+.initialize input[type='text'],
+.initialize input[type='date'],
+.initialize input[type='tel'],
+.initialize input[type='email'],
+.initialize select,
+.initialize textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-size: 16px;
+  color: #495057;
+}
+
+.initialize textarea {
+  resize: none;
+  height: 80px;
+}
+
+.initialize input[type='radio'] {
+  margin-right: 10px;
+}
+
+.gender-group {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.gender-group label {
+  display: flex;
+  align-items: center;
+}
+
+.file-upload {
+  margin-bottom: 20px;
+}
+
+.file-upload label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.file-upload ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.file-upload ul li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.file-upload ul li img {
+  width: 24px;
+  height: 24px;
+  margin-right: 10px;
+}
+
+.file-upload ul li span {
+  flex-grow: 1;
+}
+
+.file-upload ul li small {
+  color: #6c757d;
+}
+
+.add-more {
+  display: flex;
+  align-items: center;
+  color: #007bff;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.add-more img {
+  width: 24px;
+  height: 24px;
+  margin-right: 10px;
+}
+
+.file-upload-note {
+  color: #6c757d;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.checkbox-group input[type='checkbox'] {
+  margin-right: 8px;
+}
+.submit-btn,
+.reset-btn {
+  width: 100%;
+  max-width: 400px; /* You can adjust this value to suit your design */
+  padding: 12px 0;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.submit-btn {
+  background-color: #007bff; /* Blue color */
+  color: white;
+}
+
+.reset-btn {
+  background-color: #e9ecef; /* Light gray color */
+  color: #000;
+}
+
