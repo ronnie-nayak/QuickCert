@@ -67,11 +67,15 @@ export async function POST(req: NextRequest, res: NextResponse) {
     const response = await utapi.uploadFiles(file);
     fileId = response.data?.key;
 
-    return NextResponse.json({ fileId }, { status: 200 });
-  } catch (error) {
+    return NextResponse.json(
+      { documentUrl: response?.data?.url },
+      { status: 200 }
+    );
+  } catch (error: any) {
     if (fileId) {
       await utapi.deleteFiles(fileId);
     }
+    console.log(error.message);
     return NextResponse.json({ error }, { status: 500 });
   }
 }

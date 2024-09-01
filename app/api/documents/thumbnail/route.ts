@@ -12,6 +12,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
     const body = await req.json();
 
+    console.log(body.documentUrl);
     const thumbnail = await axios.post(
       'https://v2.api2pdf.com/libreoffice/thumbnail',
       {
@@ -27,7 +28,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
     const thumbnailUrl = thumbnail?.data?.FileUrl;
 
     return NextResponse.json({ thumbnailUrl }, { status: 200 });
-  } catch (error) {
+  } catch (error: any) {
+    console.log(error.message);
     return NextResponse.json({ error }, { status: 500 });
   }
 }

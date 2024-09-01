@@ -97,12 +97,12 @@ const DocumentUpload = () => {
         }
       });
       const thumbRes = await axios.post('/api/documents/thumbnail', {
-        documentUrl: uploadRes.data.fileId
+        documentUrl: uploadRes.data.documentUrl
       });
 
       const final = await axios.post('/api/documents/addDocument', {
         ...formData,
-        documentUrl: uploadRes.data.fileId,
+        documentUrl: uploadRes.data.documentUrl,
         thumbnailUrl: thumbRes.data.thumbnailUrl
       });
 
