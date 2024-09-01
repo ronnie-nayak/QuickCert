@@ -2,7 +2,7 @@ update documents set "assignedCenter"='new delhi-1';
 insert into details values (999, '0fe5c227-9e8d-4102-9e62-6b4c6ab799c8', 'Ronnie Nayak', '2000-5-5', 'kd@dk.co', '9999999999', 'add', 'new delhi', 'delhi', 19, 'Male', 10000000);
 //add random data based on given data
 
-insert into documents values (515, '0fe5c227-9e8d-4102-9e62-6b4c6ab799c8', 'PAN', '2016-5-5', '2018-5-5', 'Ronnie Nayak', '2000-5-5', 'new delhi', 'delhi', 19, '2024-1-1', null, null, 'pending', 'add', 'pdf', 'thumbnail', null, 'new delhi-1', 10000000);
+insert into documents values (515, '0fe5c227-9e8d-4102-9e62-6b4c6ab799c8', 'PAN', '2016-5-5', '2018-5-5', 'Khyati Satija', '2000-5-5', 'new delhi', 'delhi', 19, '2003-11-28', null, null, 'pending', 'add', 'pdf', 'thumbnail', null, 'new delhi-1', 1000);
 insert into documents values (548, '0fe5c227-9e8d-4102-9e62-6b4c6ab799c8', 'AADHAR', '2011-5-5', '2012-5-5', 'Ronnie Nayak', '2000-5-5', 'new delhi', 'Delhi', 19, '2024-2-1', null, null, 'pending', 'add', 'pdf', 'thumbnail', null, 'new delhi-1', 2000);
 
 insert into documents values (558, '0fe5c227-9e8d-4102-9e62-6b4c6ab799c8', 'VOTER ID', '2011-5-5', '2012-5-5', 'Ronnie Nayak', '2000-5-5', 'new delhi', 'Delhi', 19, '2024-2-1', null, null, 'pending', 'add', 'pdf', 'thumbnail', null, 'new delhi-1', 3000);

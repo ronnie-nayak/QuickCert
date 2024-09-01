@@ -21,7 +21,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
       expiryDate: new Date(body2.expiryDate),
       assignedCenter:
         body2.city.toLowerCase() + '-' + Math.ceil(Math.random() * 3),
-      fullName: body2.firstName + ' ' + body2.lastName,
+      fullName: body2.firstname + ' ' + body2.lastname,
       income: parseInt(body2.income),
       userId: session.user.id,
       title: body2.documentType

@@ -77,7 +77,7 @@ const LandingPage = () => {
           <h2 className="text-3xl font-bold text-center mb-8">How It Works</h2>
           <div className="flex flex-col md:flex-row justify-between gap-8 items-center ">
             <motion.img
-              src="https://picsum.photos/seed/picsum/500/300"
+              src="https://t4.ftcdn.net/jpg/01/87/31/25/360_F_187312561_kMY7AYVLSwCz6Jua7KusMMPQtb4TayFA.jpg"
               alt="Document verification process"
               className="rounded-lg shadow-md mb-8 md:mb-0 md:ml-8 w-1/2"
               initial={{ opacity: 0, x: -20 }}
