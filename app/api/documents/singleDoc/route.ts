@@ -46,7 +46,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
     const { docId, status, reason } = await req.json();
 
-    const certificateUrl = `https://iiseradmission.in/assets/pdfs/form-GEN-EWS.pdf`;
+    const certificateUrl = `https://drive.google.com/file/d/17wSkvqMH_pOmzcn9Lo5GEjGjSRGt1TF5/view?usp=sharing`;
 
     pusherServer.trigger(docId, 'update', {
       status,
