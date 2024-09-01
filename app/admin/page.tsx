@@ -20,18 +20,15 @@ import { SelectDocuments } from '@/lib/schema/documents';
 import { capitalize, cn } from '@/lib/utils';
 import axios from 'axios';
 import { CalendarIcon } from 'lucide-react';
+import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useState, useEffect, useCallback } from 'react';
 
 export default function AdminPage() {
   const [documents, setDocuments] = useState<SelectDocuments[]>([]);
   const [loading, setLoading] = useState(true);
-  const [smallLoading, setSmallLoading] = useState(false);
   const [error, setError] = useState('');
-  const [centerData, setCenterData] = useState({
-    adminCenter: '',
-    total: 0
-  });
+  const [adminCenter, setAdminCenter] = useState('');
 
   const router = useRouter();
   const pathname = usePathname();
@@ -64,10 +61,7 @@ export default function AdminPage() {
         params: { search, offset, orderBy, column, type, startDate, endDate }
       });
       setDocuments(response.data.documents);
-      setCenterData({
-        adminCenter: response.data.adminCenter,
-        total: response.data.total
-      });
+      setAdminCenter(response.data.adminCenter);
       setError('');
     } catch (error: any) {
       setError(error.message);
@@ -87,24 +81,6 @@ export default function AdminPage() {
     return () => clearTimeout(removeTimeout);
   }, [search, offset, orderBy, column, type, startDate, endDate]);
 
-  async function distributeDocuments() {
-    setSmallLoading(true);
-    try {
-      const response = await axios.patch('/api/documents/distribute');
-      await fetchDocuments();
-      setError('');
-    } catch (error: any) {
-      setError(error.message);
-      console.error(error.message);
-
-      if (error.response?.data.error === 'Unauthorized') {
-        router.replace('/login');
-      }
-    } finally {
-      setSmallLoading(false);
-    }
-  }
-
   if (loading)
     return (
       <div className="p-20">
@@ -122,9 +98,10 @@ export default function AdminPage() {
   return (
     <>
       <div className="p-10 flex gap-8 items-center font-bold text-2xl w-9/12 mx-auto">
-        <h1>Assigned Center: {capitalize(centerData.adminCenter)}</h1>
-        <h1>Total Documents: {centerData.total}</h1>
-        <Button onClick={distributeDocuments}>Distribute Documents</Button>
+        <h1>Assigned Center: {capitalize(adminCenter)}</h1>
+        <Link href="/admin/analytics">
+          <Button>Analytics</Button>
+        </Link>
       </div>
 
       <div className="mt-2 flex flex-col items-center gap-4 sm:flex-row w-9/12 mx-auto pt-10 pb-6">
@@ -145,7 +122,10 @@ export default function AdminPage() {
             onChange={(e) => {
               const value = e.target.value;
               router.replace(
-                `${pathname}?${createQueryString([{ name: 'search', value }])}`
+                `${pathname}?${createQueryString([
+                  { name: 'search', value },
+                  { name: 'offset', value: '0' }
+                ])}`
               );
             }}
           />
@@ -154,7 +134,12 @@ export default function AdminPage() {
           value={type}
           onValueChange={(val) =>
             router.replace(
-              pathname + '?' + createQueryString([{ name: 'type', value: val }])
+              pathname +
+                '?' +
+                createQueryString([
+                  { name: 'type', value: val },
+                  { name: 'offset', value: '0' }
+                ])
             )
           }
         >
@@ -193,7 +178,8 @@ export default function AdminPage() {
                   pathname +
                     '?' +
                     createQueryString([
-                      { name: 'startDate', value: date?.toDateString()! }
+                      { name: 'startDate', value: date?.toDateString()! },
+                      { name: 'offset', value: '0' }
                     ])
                 );
               }}
@@ -232,7 +218,8 @@ export default function AdminPage() {
                   pathname +
                     '?' +
                     createQueryString([
-                      { name: 'endDate', value: date?.toDateString()! }
+                      { name: 'endDate', value: date?.toDateString()! },
+                      { name: 'offset', value: '0' }
                     ])
                 );
               }}

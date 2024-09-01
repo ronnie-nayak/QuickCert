@@ -43,10 +43,8 @@ export async function GET(req: NextRequest, res: NextResponse) {
       session.user.adminCenter
     );
 
-    const total = await totalDocuments(session.user.adminCenter);
-
     return NextResponse.json(
-      { documents, total, adminCenter: session.user.adminCenter },
+      { documents, adminCenter: session.user.adminCenter },
       { status: 200 }
     );
   } catch (error) {
@@ -103,7 +101,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
       expiryDate: new Date(body.expiryDate),
       documentUrl: response.data?.url!,
       thumbnailUrl,
-      assignedCenter: body.city + '-' + Math.floor(Math.random() * 3)
+      assignedCenter:
+        body.city.toLowerCase() + '-' + Math.floor(Math.random() * 3)
     });
 
     return NextResponse.json(documents, { status: 200 });

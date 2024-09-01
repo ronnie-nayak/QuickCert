@@ -21,7 +21,8 @@ import {
   gte,
   lte,
   and,
-  inArray
+  inArray,
+  sql
 } from 'drizzle-orm';
 import { createInsertSchema } from 'drizzle-zod';
 
@@ -53,10 +54,49 @@ export const db = drizzle(neon(process.env.POSTGRES_URL!), { schema });
 
 export async function totalDocuments(assignedCenter: string) {
   const res = await db
-    .select({ count: count() })
+    .select({
+      assignedCenter: schema.documents.assignedCenter,
+      count: sql<number>`cast(count(${schema.documents.id}) as int)`
+    })
     .from(schema.documents)
-    .where(ilike(schema.documents.assignedCenter, `%${assignedCenter}%`));
-  return res[0].count;
+    .where(eq(schema.documents.status, 'pending'))
+    .groupBy(schema.documents.assignedCenter);
+
+  const res2 = await db
+    .select({
+      status: schema.documents.status,
+      count: sql<number>`cast(count(${schema.documents.id}) as int)`
+    })
+    .from(schema.documents)
+    .groupBy(schema.documents.status);
+
+  const res3 = await db
+    .select({
+      date: sql<string>`to_char(${schema.documents.requestDate}, 'YYYY-MM-DD')`,
+      count: sql<number>`cast(count(${schema.documents.id}) as int)`
+    })
+    .from(schema.documents)
+    .orderBy(asc(schema.documents.requestDate))
+    .groupBy(schema.documents.requestDate);
+
+  const res4 = await db
+    .select({
+      assignedCenter: schema.documents.assignedCenter,
+      status: schema.documents.status,
+      count: sql<number>`cast(count(${schema.documents.id}) as int)`
+    })
+    .from(schema.documents)
+    .groupBy(schema.documents.assignedCenter, schema.documents.status);
+
+  // .from(schema.documents)
+  // .where(ilike(schema.documents.assignedCenter, `%${assignedCenter}%`));
+  // return res[0].count;
+  return {
+    centers: res,
+    status: res2,
+    dates: res3,
+    concatCentStatus: res4
+  };
 }
 
 export async function getSingleDocument(id: number) {
@@ -78,27 +118,19 @@ export async function getDetails(id: string) {
 export async function changeDocStatus(
   id: number,
   status: 'approved' | 'rejected',
-  reason: string
+  reason: string,
+  certificateUrl: string
 ) {
-  if (status === 'approved') {
-    return await db
-      .update(schema.documents)
-      .set({
-        status,
-        approvedDate: new Date(),
-        reason
-      })
-      .where(eq(schema.documents.id, id));
-  } else if (status === 'rejected') {
-    return await db
-      .update(schema.documents)
-      .set({
-        status,
-        rejectedDate: new Date(),
-        reason
-      })
-      .where(eq(schema.documents.id, id));
-  }
+  return await db
+    .update(schema.documents)
+    .set({
+      status,
+      approvedDate: status === 'approved' ? new Date() : null,
+      rejectedDate: status === 'rejected' ? new Date() : null,
+      reason,
+      certificateUrl
+    })
+    .where(eq(schema.documents.id, id));
 }
 
 export async function getDocumentById(
@@ -300,7 +332,12 @@ export async function distributeDocuments(assignedCenter: string) {
   let ids: any = await db
     .select({ id: schema.documents.id })
     .from(schema.documents)
-    .where(ilike(schema.documents.assignedCenter, `%${centerName}%`));
+    .where(
+      and(
+        ilike(schema.documents.assignedCenter, `%${centerName}%`),
+        eq(schema.documents.status, 'pending')
+      )
+    );
   ids = ids.map((idx: { id: number }) => idx.id);
   const totalDocs = ids.length;
   let eachTotal = Math.ceil(totalDocs / 3);

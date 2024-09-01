@@ -102,7 +102,10 @@ export default function AdminPage() {
             onChange={(e) => {
               const value = e.target.value;
               router.replace(
-                `${pathname}?${createQueryString([{ name: 'search', value }])}`
+                `${pathname}?${createQueryString([
+                  { name: 'search', value },
+                  { name: 'offset', value: '0' }
+                ])}`
               );
             }}
           />
@@ -111,7 +114,12 @@ export default function AdminPage() {
           value={type}
           onValueChange={(val) =>
             router.replace(
-              pathname + '?' + createQueryString([{ name: 'type', value: val }])
+              pathname +
+                '?' +
+                createQueryString([
+                  { name: 'type', value: val },
+                  { name: 'offset', value: '0' }
+                ])
             )
           }
         >
@@ -150,7 +158,8 @@ export default function AdminPage() {
                   pathname +
                     '?' +
                     createQueryString([
-                      { name: 'startDate', value: date?.toDateString()! }
+                      { name: 'startDate', value: date?.toDateString()! },
+                      { name: 'offset', value: '0' }
                     ])
                 );
               }}
@@ -189,7 +198,8 @@ export default function AdminPage() {
                   pathname +
                     '?' +
                     createQueryString([
-                      { name: 'endDate', value: date?.toDateString()! }
+                      { name: 'endDate', value: date?.toDateString()! },
+                      { name: 'offset', value: '0' }
                     ])
                 );
               }}

@@ -3,16 +3,35 @@ insert into details values (999, '0fe5c227-9e8d-4102-9e62-6b4c6ab799c8', 'Ronnie
 //add random data based on given data
 
 insert into documents values (515, '0fe5c227-9e8d-4102-9e62-6b4c6ab799c8', 'PAN', '2016-5-5', '2018-5-5', 'Ronnie Nayak', '2000-5-5', 'new delhi', 'delhi', 19, '2024-1-1', null, null, 'pending', 'add', 'pdf', 'thumbnail', null, 'new delhi-1', 10000000);
-insert into documents values (548, '0fe5c227-9e8d-4102-9e62-6b4c6ab799c8', 'AADHAR', '2011-5-5', '2012-5-5', 'Anthony', '2024-5-5', 'new delhi', 'Delhi', 19, '2025-1-1', null, null, 'pending', 'Fale', 'lskdjf', 'thumbail', null, 'new delhi-1');
+insert into documents values (548, '0fe5c227-9e8d-4102-9e62-6b4c6ab799c8', 'AADHAR', '2011-5-5', '2012-5-5', 'Ronnie Nayak', '2000-5-5', 'new delhi', 'Delhi', 19, '2024-2-1', null, null, 'pending', 'add', 'pdf', 'thumbnail', null, 'new delhi-1', 2000);
+
+insert into documents values (558, '0fe5c227-9e8d-4102-9e62-6b4c6ab799c8', 'VOTER ID', '2011-5-5', '2012-5-5', 'Ronnie Nayak', '2000-5-5', 'new delhi', 'Delhi', 19, '2024-2-1', null, null, 'pending', 'add', 'pdf', 'thumbnail', null, 'new delhi-1', 3000);
+
+insert into documents values (568, '0fe5c227-9e8d-4102-9e62-6b4c6ab799c8', 'Driving License', '2011-5-5', '2012-5-5','Ronnie Nayak', '2000-5-5' , 'new delhi', 'Delhi', 19, '2024-2-1', null, null, 'pending', 'add', 'pdf', 'thumbnail', null, 'new delhi-1', 4000);
+
+insert into documents values (578, '0fe5c227-9e8d-4102-9e62-6b4c6ab799c8', 'Passport', '2011-5-5', '2012-5-5','Ronnie Nayak', '2000-5-5' , 'new delhi', 'Delhi', 19, '2024-2-1', null, null, 'pending', 'add', 'pdf', 'thumbnail', null, 'new delhi-1', 5000);
+
+insert into documents values (588, '0fe5c227-9e8d-4102-9e62-6b4c6ab799c8', 'Birth Certificate', '2011-5-5', '2012-5-5','Ronnie Nayak', '2000-5-5' , 'new delhi', 'Delhi', 19, '2024-3-1', null, null, 'pending', 'add', 'pdf', 'thumbnail', null, 'new delhi-1', 6000);
+
+insert into documents values (598, '0fe5c227-9e8d-4102-9e62-6b4c6ab799c8', 'Marriage Certificate', '2011-5-5', '2012-5-5','Ronnie Nayak', '2000-5-5' , 'new delhi', 'Delhi', 19, '2024-4-1', null, null, 'pending', 'add', 'pdf', 'thumbnail', null, 'new delhi-1', 7000);
+
+insert into documents values (518, '0fe5c227-9e8d-4102-9e62-6b4c6ab799c8', 'Tax Card', '2011-5-5', '2012-5-5','Ronnie Nayak', '2000-5-5' , 'new delhi', 'Delhi', 19, '2024-4-1', null, null, 'pending', 'add', 'pdf', 'thumbnail', null, 'new delhi-1', 8000);
+
+insert into documents values (528, '0fe5c227-9e8d-4102-9e62-6b4c6ab799c8', 'Ration Card', '2011-5-5', '2012-5-5','Ronnie Nayak', '2000-5-5' , 'new delhi', 'Delhi', 19, '2024-4-1', null, null, 'pending', 'add', 'pdf', 'thumbnail', null, 'new delhi-1', 9000);
 
 
-insert into documents values (578, '0fe5c227-9e8d-4102-9e62-6b4c6ab799c8', 'PAN', '2017-6-6', '2019-6-6', 'John', '2017-6-6', 'Mumbai', 'Maharashtra', 16, '2021-2-2', null, null, 'approved', 'True', 'abcd1234', 'thumbnail', null, 'new delhi-1');
+insert into documents values (538, '0fe5c227-9e8d-4102-9e62-6b4c6ab799c8', 'Property Deed', '2011-5-5', '2012-5-5','Ronnie Nayak', '2000-5-5' , 'new delhi', 'Delhi', 19, '2024-2-1', null, null, 'pending', 'add', 'pdf', 'thumbnail', null, 'new delhi-1', 9000);
 
-insert into documents values (623, '0fe5c227-9e8d-4102-9e62-6b4c6ab799c8', 'AADHAR', '2010-4-4', '2011-4-4', 'Emily', '2022-6-6', 'Chennai', 'Tamil Nadu', 12, '2023-3-3', null, null, 'approved', 'True', 'xyz7890', 'thumbnail', null, 'new delhi-1');
 
-insert into documents values (610, '0fe5c227-9e8d-4102-9e62-6b4c6ab799c8', 'VOTER ID', '2015-7-7', '2016-7-7', 'Michael', '2023-7-7', 'Bangalore', 'Karnataka', 18, '2024-4-4', null, null, 'pending', 'False', 'efgh5678', 'thumbnail', null, 'new delhi-1');
 
-insert into documents values (680, '0fe5c227-9e8d-4102-9e62-6b4c6ab799c8', 'PASSPORT', '2012-8-8', '2014-8-8', 'Alice', '2021-8-8', 'Kolkata', 'West Bengal', 21, '2022-5-5', null, null, 'approved', 'True', 'ijkl9012', 'thumbnail', null, 'new delhi-1');
+
+insert into documents values (578, '0fe5c227-9e8d-4102-9e62-6b4c6ab799c8', 'PAN', '2017-6-6', '2019-6-6', 'John', '2017-6-6', 'Mumbai', 'Maharashtra', 16, '2021-2-2', null, null, 'approved', 'True', 'abcd1234', 'thumbnail', null, 'new delhi-1', 2);
+
+insert into documents values (623, '0fe5c227-9e8d-4102-9e62-6b4c6ab799c8', 'AADHAR', '2010-4-4', '2011-4-4', 'Emily', '2022-6-6', 'Chennai', 'Tamil Nadu', 12, '2023-3-3', null, null, 'approved', 'True', 'xyz7890', 'thumbnail', null, 'new delhi-1', 3);
+
+insert into documents values (610, '0fe5c227-9e8d-4102-9e62-6b4c6ab799c8', 'VOTER ID', '2015-7-7', '2016-7-7', 'Michael', '2023-7-7', 'Bangalore', 'Karnataka', 18, '2024-4-4', null, null, 'pending', 'False', 'efgh5678', 'thumbnail', null, 'new delhi-1', 4);
+
+insert into documents values (680, '0fe5c227-9e8d-4102-9e62-6b4c6ab799c8', 'PASSPORT', '2012-8-8', '2014-8-8', 'Alice', '2021-8-8', 'Kolkata', 'West Bengal', 21, '2022-5-5', null, null, 'approved', 'True', 'ijkl9012', 'thumbnail', null, 'new delhi-1', 5);
 
 
 insert into documents values (701, '0fe5c227-9e8d-4102-9e62-6b4c6ab799c8', 'DRIVING LICENSE', '2018-9-9', '2020-9-9', 'David', '2020-9-9', 'Hyderabad', 'Telangana', 20, '2023-6-6', null, null, 'approved', 'True', 'mnop3456', 'thumbnail', null, 'new delhi-1');

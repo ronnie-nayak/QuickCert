@@ -29,7 +29,7 @@ export default async function ClientLayout({
           <Link href="/client/new-doc">
             <Button className="text-lg flex gap-2 items-center">
               <FaPlus />
-              New Document
+              New Request
             </Button>
           </Link>
         </div>

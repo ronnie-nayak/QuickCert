@@ -1,0 +1,101 @@
+import React from 'react';
+import Plot from 'react-plotly.js';
+
+const AdminBarChart = () => {
+  const data = [
+    {
+      x: ['Admin1', 'Admin2', 'Admin3', 'Admin4', 'Admin5'],
+      y: [50, 60, 55, 48, 65],
+      type: 'bar',
+      marker: {
+        color: ['#FF5733', '#33FF57', '#3357FF', '#FF5733', '#33FF57'], // Custom colors
+        opacity: 0.8 // Slight transparency
+      },
+      text: [
+        '50 requests',
+        '60 requests',
+        '55 requests',
+        '48 requests',
+        '65 requests'
+      ],
+      textposition: 'auto'
+    }
+  ];
+
+  const layout = {
+    title: {
+      text: 'Number of Requests per Admin',
+      font: {
+        family: 'Arial, sans-serif',
+        size: 24,
+        color: '#333'
+      }
+    },
+    xaxis: {
+      title: {
+        text: 'Admin Names',
+        font: {
+          family: 'Arial, sans-serif',
+          size: 18,
+          color: '#7f7f7f'
+        }
+      },
+      tickfont: {
+        family: 'Arial, sans-serif',
+        size: 14,
+        color: '#333'
+      },
+      showgrid: false,
+      zeroline: false
+    },
+    yaxis: {
+      title: {
+        text: 'Number of Requests',
+        font: {
+          family: 'Arial, sans-serif',
+          size: 18,
+          color: '#7f7f7f'
+        }
+      },
+      tickfont: {
+        family: 'Arial, sans-serif',
+        size: 14,
+        color: '#333'
+      },
+      showgrid: true,
+      gridcolor: '#e9e9e9'
+    },
+    plot_bgcolor: '#f4f4f4', // Light gray background for plot area
+    paper_bgcolor: '#ffffff', // White background for the paper
+    margin: {
+      l: 50,
+      r: 50,
+      b: 50,
+      t: 70
+    },
+    hovermode: 'closest', // Enhances interactivity
+    bargap: 0.2, // Adds space between bars
+    annotations: [
+      {
+        x: 'Admin5',
+        y: 65,
+        xref: 'x',
+        yref: 'y',
+        text: 'Highest requests',
+        showarrow: true,
+        arrowhead: 2,
+        ax: 0,
+        ay: -40,
+        font: {
+          family: 'Arial, sans-serif',
+          size: 12,
+          color: '#333'
+        }
+      }
+    ]
+  };
+
+  return <Plot data={data} layout={layout} />;
+};
+
+export default AdminBarChart;

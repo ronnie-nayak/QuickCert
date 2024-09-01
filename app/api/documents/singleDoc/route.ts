@@ -46,14 +46,22 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
     const { docId, status, reason } = await req.json();
 
+    const certificateUrl = `https://iiseradmission.in/assets/pdfs/form-GEN-EWS.pdf`;
+
     pusherServer.trigger(docId, 'update', {
       status,
-      reason
+      reason,
+      certificateUrl: status === 'approved' ? certificateUrl : null
     });
 
-    const document = await changeDocStatus(docId, status, reason);
+    const document = await changeDocStatus(
+      docId,
+      status,
+      reason,
+      certificateUrl
+    );
 
-    return NextResponse.json(document, { status: 200 });
+    return NextResponse.json({ certificateUrl }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ error }, { status: 500 });
   }

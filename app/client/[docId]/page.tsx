@@ -23,6 +23,7 @@ import Link from 'next/link';
 import { FaCheckCircle, FaHourglassHalf, FaTimesCircle } from 'react-icons/fa';
 import { pusherClient } from '@/lib/pusher';
 import { useRouter } from 'next/navigation';
+import { clsx } from 'clsx';
 
 export default function Page({ params }: { params: { docId: string } }) {
   const [loading, setLoading] = useState(true);
@@ -30,8 +31,6 @@ export default function Page({ params }: { params: { docId: string } }) {
     SelectDocuments & { users: SelectUser }
   >();
   const [userDetails, setUserDetails] = useState<SelectDetials>();
-  const [reason, setReason] = useState('');
-  const [status, setStatus] = useState('pending');
 
   const router = useRouter();
 
@@ -50,8 +49,6 @@ export default function Page({ params }: { params: { docId: string } }) {
       );
       setSingleDocument(data.singleDocument);
       setUserDetails(data.userDetails);
-      setStatus(data.singleDocument.status);
-      setReason(data.singleDocument.reason);
 
       setLoading(false);
     } catch (error: any) {
@@ -69,9 +66,21 @@ export default function Page({ params }: { params: { docId: string } }) {
     pusherClient.subscribe(params.docId);
     pusherClient.bind(
       'update',
-      ({ reason, status }: { reason: string; status: string }) => {
-        setReason(reason);
-        setStatus(status);
+      ({
+        reason,
+        status,
+        certificateUrl
+      }: {
+        reason: string;
+        status: 'approved' | 'rejected' | 'pending';
+        certificateUrl: string;
+      }) => {
+        setSingleDocument((prev) => ({
+          ...prev!,
+          status,
+          reason,
+          certificateUrl
+        }));
       }
     );
 
@@ -135,7 +144,9 @@ export default function Page({ params }: { params: { docId: string } }) {
         {stages.map((stage, index) => (
           <div
             key={index}
-            className={`tracker-step flex flex-col items-center ${status === stage.name ? 'active' : ''}`}
+            className={`tracker-step flex flex-col items-center ${
+              singleDocument?.status === stage.name && 'active'
+            }`}
           >
             <div className="icon">{stage.icon}</div>
             <div className="label">{stage.name}</div>
@@ -175,10 +186,27 @@ export default function Page({ params }: { params: { docId: string } }) {
           )}
         </div>
         <div className="flex flex-col">
-          <h1>{capitalize(status)}</h1>
-          <p>{reason}</p>
+          <h1>{capitalize(singleDocument?.status ?? '')}</h1>
+          <p>{singleDocument?.reason}</p>
         </div>
       </div>
+
+      {singleDocument?.certificateUrl && (
+        <div className="flex justify-between items-center mt-5">
+          <div className="flex gap-4 items-center">
+            <div className="w-16 h-16 rounded-lg flex justify-center items-center bg-gray-200">
+              <IoDocumentOutline size={40} />
+            </div>
+            <div className="flex flex-col">
+              <h1 className="font-bold">Approved Certificate</h1>
+              <p>PDF</p>
+            </div>
+          </div>
+          <Link href={singleDocument?.certificateUrl} target="_blank">
+            <Button className="font-bold">View</Button>
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

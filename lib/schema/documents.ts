@@ -44,6 +44,7 @@ export const documents = pgTable('documents', {
 
   documentUrl: text('documentUrl').notNull(),
   thumbnailUrl: text('thumbnailUrl').notNull(),
+  certificateUrl: text('certificateUrl'),
 
   assignedCenter: varchar('assignedCenter', { length: 256 }).notNull(),
 

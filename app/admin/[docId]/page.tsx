@@ -28,7 +28,7 @@ export default function Page({ params }: { params: { docId: string } }) {
   >();
   const [userDetails, setUserDetails] = useState<SelectDetials>();
   const [reason, setReason] = useState('');
-  const [status, setStatus] = useState('approved');
+  const [status, setStatus] = useState<'approved' | 'rejected'>('approved');
 
   const router = useRouter();
 
@@ -62,11 +62,24 @@ export default function Page({ params }: { params: { docId: string } }) {
 
   const handleSubmit = async () => {
     try {
-      const { data } = await axios.post(`/api/documents/singleDoc`, {
+      const response = await axios.post(`/api/documents/singleDoc`, {
         docId: params.docId,
         status,
         reason
       });
+      await axios.post('/api/email', {
+        email: userDetails?.email,
+        subject: `Document Status: ${status}`,
+        message: `Your document has been ${status}.`,
+        reason,
+        certificateUrl:
+          status === 'approved' ? response.data.certificateUrl : null
+      });
+      setSingleDocument((prev) => ({
+        ...prev!,
+        status,
+        reason
+      }));
     } catch (error: any) {
       console.error('Error:', error);
 
@@ -90,7 +103,8 @@ export default function Page({ params }: { params: { docId: string } }) {
     Address: userDetails?.address,
     City: userDetails?.city,
     State: userDetails?.state,
-    'Zip Code': userDetails?.zip
+    'Zip Code': userDetails?.zip,
+    Income: userDetails?.income
   };
 
   const documentDetails = {
@@ -99,18 +113,23 @@ export default function Page({ params }: { params: { docId: string } }) {
     Address: singleDocument?.address,
     City: singleDocument?.city,
     State: singleDocument?.state,
-    'Zip Code': singleDocument?.zip
+    'Zip Code': singleDocument?.zip,
+    Income: singleDocument?.income
   };
 
   function compareDetails(applicant: any, document: any) {
-    if (status === 'approved') return true;
-    if (status === 'rejected') return false;
+    if (status === 'approved')
+      return { value: true, reason: 'Manually Approved' };
+    if (status === 'rejected')
+      return { value: false, reason: 'Manually Rejected' };
+    if (applicant['Income'] > 100000 || document['Income'] > 100000)
+      return { value: false, reason: 'Income is greater than 100000' };
     for (let key in applicant) {
       if (applicant[key] !== document[key]) {
-        return false;
+        return { value: false, reason: `Data Verfification failed` };
       }
     }
-    return true;
+    return { value: true, reason: 'Automatic Verification' };
   }
 
   const isSame = compareDetails(applicantDetails, documentDetails);
@@ -180,16 +199,22 @@ export default function Page({ params }: { params: { docId: string } }) {
         </div>
       </div>
 
-      <h1 className="text-5xl font-bold m-2 mt-10 text-center">
+      <h1 className="text-4xl font-bold m-2 mt-10 text-center">
         Automatic Evaluation
       </h1>
       <h1
         className={clsx(
           'text-5xl font-bold m-2 text-center underline',
-          isSame ? 'text-green-500' : 'text-red-500'
+          isSame.value ? 'text-green-500' : 'text-red-500'
         )}
       >
-        {isSame ? 'Approved' : 'Rejected'}
+        {isSame.value ? 'Approved' : 'Rejected'}
+      </h1>
+      <h1 className="text-2xl mt-5">
+        Reason:
+        <span className="text-3xl underline ml-5 font-bold">
+          {isSame.reason}
+        </span>
       </h1>
 
       <h1 className="text-2xl font-bold mt-10">Document</h1>
@@ -240,7 +265,7 @@ export default function Page({ params }: { params: { docId: string } }) {
 
       <RadioGroup
         defaultValue={status}
-        onValueChange={(val) => setStatus(val)}
+        onValueChange={(val: 'approved' | 'rejected') => setStatus(val)}
         className="font-bold text-lg"
       >
         <div className="flex items-center space-x-2 rounded-lg border-2 border-gray-500 w-full p-4">

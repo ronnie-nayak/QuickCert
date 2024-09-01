@@ -126,7 +126,7 @@ const DocumentUpload = () => {
   return (
     <div className="initialize2">
       <div className="container2">
-        <h1>Document Upload Portal</h1>
+        <h1>EWS Certificate Verification</h1>
         <form onSubmit={handleSubmit} onReset={handleReset}>
           <div className="name2">
             <div>
@@ -178,6 +178,9 @@ const DocumentUpload = () => {
               <option value="driving_license">Driving License</option>
               <option value="ration_card">Ration Card</option>
               <option value="govt_scheme_card">Govt Scheme Card</option>
+              <option value="aadhar_card">Aadhar Card</option>
+              <option value="voter_id">Voter ID</option>
+              <option value="pan_card">PAN Card</option>
             </select>
           </div>
           <div className="file-upload2">
@@ -197,7 +200,7 @@ const DocumentUpload = () => {
               }} // Hide the file input
               required
             />
-            <label>Upload Document</label>
+            <label>Document for Verification</label>
             <button
               type="button"
               className="upload-btn2"
