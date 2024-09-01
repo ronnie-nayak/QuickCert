@@ -62,50 +62,12 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
     const formData = await req.formData();
     const file = formData.get('document');
-    const body = {
-      fullName: `${formData.get('firstname')} ${formData.get('lastname')}`,
-      dob: formData.get('dob') as string,
-      title: formData.get('documentType') as string,
-      issueDate: formData.get('issueDate') as string,
-      expiryDate: formData.get('expiryDate') as string,
-      address: formData.get('address') as string,
-      city: formData.get('city') as string,
-      state: formData.get('state') as string,
-      zip: formData.get('zip') as string,
-      userId: session.user.id,
-      income: parseInt(formData.get('income') as string)
-    };
 
     //@ts-ignore
     const response = await utapi.uploadFiles(file);
     fileId = response.data?.key;
 
-    const thumbnail = await axios.post(
-      'https://v2.api2pdf.com/libreoffice/thumbnail',
-      {
-        url: response.data?.url
-      },
-      {
-        headers: {
-          Authorization: process.env.API2PDF_API_KEY
-        }
-      }
-    );
-
-    const thumbnailUrl = thumbnail?.data?.FileUrl;
-
-    const documents = await addDocument({
-      ...body,
-      dob: new Date(body.dob),
-      issueDate: new Date(body.issueDate),
-      expiryDate: new Date(body.expiryDate),
-      documentUrl: response.data?.url!,
-      thumbnailUrl,
-      assignedCenter:
-        body.city.toLowerCase() + '-' + Math.ceil(Math.random() * 3)
-    });
-
-    return NextResponse.json(documents, { status: 200 });
+    return NextResponse.json({ fileId }, { status: 200 });
   } catch (error) {
     if (fileId) {
       await utapi.deleteFiles(fileId);

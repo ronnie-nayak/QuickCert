@@ -91,11 +91,21 @@ const DocumentUpload = () => {
 
     setLoading(true);
     try {
-      const response = await axios.post('/api/documents', formD, {
+      const uploadRes = await axios.post('/api/documents', formD, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
+      const thumbRes = await axios.post('/api/documents/thumbnail', {
+        documentUrl: uploadRes.data.fileId
+      });
+
+      const final = await axios.post('/api/documents/addDocument', {
+        ...formData,
+        documentUrl: uploadRes.data.fileId,
+        thumbnailUrl: thumbRes.data.thumbnailUrl
+      });
+
       router.push('/client');
     } catch (error: any) {
       toast({

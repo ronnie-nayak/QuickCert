@@ -67,6 +67,12 @@ export default function Page({ params }: { params: { docId: string } }) {
         status,
         reason
       });
+
+      setSingleDocument((prev) => ({
+        ...prev!,
+        status,
+        reason
+      }));
       await axios.post('/api/email', {
         email: userDetails?.email,
         subject: `Document Status: ${status}`,
@@ -75,11 +81,6 @@ export default function Page({ params }: { params: { docId: string } }) {
         certificateUrl:
           status === 'approved' ? response.data.certificateUrl : null
       });
-      setSingleDocument((prev) => ({
-        ...prev!,
-        status,
-        reason
-      }));
     } catch (error: any) {
       console.error('Error:', error);
 
