@@ -100,8 +100,7 @@ const DocumentUpload = () => {
     } catch (error: any) {
       toast({
         title: 'Fill all fields and upload a document',
-        description:
-          "All fields are required and document shouldn't exceed 3MB",
+        description: error.message,
         variant: 'destructive'
       });
 
