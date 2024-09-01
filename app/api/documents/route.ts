@@ -102,7 +102,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
       documentUrl: response.data?.url!,
       thumbnailUrl,
       assignedCenter:
-        body.city.toLowerCase() + '-' + Math.floor(Math.random() * 3)
+        body.city.toLowerCase() + '-' + Math.ceil(Math.random() * 3)
     });
 
     return NextResponse.json(documents, { status: 200 });
